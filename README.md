@@ -9,13 +9,13 @@ In this course we will talk about the basics of computer vision, in which we wil
 - Morphologic filters. 
 
 
-## What Computer Vision is ? 
+## Computer vision in a nutshell 
 
-Computer vision commonly abbreviated as CV could be described as a field of study that allows a computer to analise and have understanding of an uploaded digital image or group of images such as videos. 
+Computer vision commonly abbreviated as CV could be described as a field of study that allows a computer to analyze and have understanding of an uploaded digital image or group of images such as videos. 
 
 The main idea of ​​CV along with robotics and other fields of study is to help and improve tasks that could be exhaustive or repetitive for humans. In recent years, there have been many improvements with the invention of complex computer vision and deep learning systems, such as the well-known convolutional neural networks, which changed the point of view to solve many problems, such as facial recognition or medical images among others. 
 
-For this course in specific we are going to make use of python 3.5 and opencv 3, despite this python version can be considered a little old, is a very stable version, however fell free to change to newest versions like python 3.7, some featueres may change, but it keeps the main idea. 
+For this course in specific we are going to make use of python 3.5 and opencv 3, despite this python version can be considered a little old, is a very stable version, however fell free to change to newest versions like python 3.7, some features may change, but it keeps the main idea. 
 
 
 ### Images
@@ -53,5 +53,31 @@ cv2.imshow('image',img)
 
 #The window will close after a key press
 cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+#### Loading a video
+
+```python  
+import cv2
+
+#Read the video
+cap = cv2.VideoCapture("Test_video.mp4")
+
+#Runs until the last frame of the video has been analyzed
+while(True):
+
+    #Read every frame of the video
+    ret, frame = cap.read()
+    
+    #Display each frames 
+    cv2.imshow('frame',frame)
+
+    #The loop will break if the key is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+#The video window will close
+cap.release()
 cv2.destroyAllWindows()
 ```
