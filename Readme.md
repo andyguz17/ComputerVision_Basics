@@ -9,7 +9,7 @@ In this course we will talk about the basics of computer vision, in which we wil
 - Edge detection and a brief introduction to convolutions. 
 - Color Spaces.
 
-### What Compuiter Vision is ? 
+## What Compuiter Vision is ? 
 
 Computer vision commonly abbreviated as CV could be described as a field of study that allows a computer to analise and have understanding of an uploaded digital image or group of images such as videos. 
 
@@ -22,7 +22,7 @@ For this course in specific we are going to make use of python 3.5 and opencv, d
 
 First of all we need to understand what exactly an image, colloquially we could describe it as a visual representation of something that itself is a set of many characteristics as color, shapes, etc. For a computer an image could be better described as a matrix, in which every value is considered a pixel, so when your a talking about a 1080p image resolution, you´re refering to an specific 1080*1920 px matrix.
 
-#### Color 
+### Color 
 
 In the case of an colored imaged, we are talking about a thre-dimmensional matrix where each dimension corresponds to an specific color chanel (Red, green, blue), the dimensions of this matrix will be different for different color spaces which we will discuss further in the course. 
 
