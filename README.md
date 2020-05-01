@@ -41,6 +41,8 @@ Ok, so now that you have a brief introduction about what computer vision is, and
 
 #### Loading an image 
 
+###### *Basics/load_img.py*
+
 ```python 
 #Import the Opencv Library
 import cv2
@@ -57,6 +59,8 @@ cv2.destroyAllWindows()
 ```
 
 #### Loading a video
+
+###### *Basics/load_vid.py*
 
 ```python  
 import cv2
