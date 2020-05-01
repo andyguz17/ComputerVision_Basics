@@ -11,7 +11,7 @@ In this course we will talk about the basics of computer vision, in which we wil
 
 ### What is  computer vision ? 
 
-<p align="justify">
+<p style="text-align:justify">
 Computer vision commonly abbreviated as CV could be described as a field of study that allows a computer to analise and have understanding of an uploaded digital image or group of images such as videos. 
 
 The main idea of ​​CV along with robotics and other fields of study is to help and improve tasks that could be exhaustive or repetitive for humans. In recent years, there have been many improvements with the invention of complex systems of computer vision and deep learning, such as the well-known convolutional neural networks, which changed the point of view to solve many problems, such as facial recognition or medical images among others. 
