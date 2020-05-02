@@ -167,10 +167,11 @@ cv2.destroyAllWindows()
 
 #### Edge Detection 
 
-The edge detection in the image proccesing world is very important, it facilitates the object recognition, region segmentation of images, among others. The edges are places of the image where an abrupt change in the levels of gray exists.
+The edge detection in image proccesing world is very important, it facilitates the object recognition, region segmentation of images, among others. The edges are places of the image where an abrupt change in the levels of gray exists.
 
 For this next chapter we are going to work with edge detection, two of the most common algorithms are the canny detector which uses convolution masks and is based on the first derivative. In the second part we will work with is the sobel operator same that work with convolutions (It should be noted that the canny detector uses the sobel operator to get the first derivative in the horizontal and vertical direction for the gradient). 
 
+##### Canny edge detection
 *For better understanding of the canny edge detector you can visit the <a href="https://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html">Opencv Page</a>*
 
 ###### *Edge detection/main.py*
@@ -207,3 +208,46 @@ cv2.destroyAllWindows()
 
 The ```minV``` and ```maxV``` are considered the limits of intensty gradient, it means that if the gradient intesity is lower than ```minV``` are considered non-edges so they will be discarded, if the value is higher than ```maxV``` are considered borders, and finally those who are in between the limits will be considered edges or non-edges deppending on their connectivity.
 
+##### Sobel Operator
+
+
+```Python
+import cv2
+import numpy as np
+
+img = cv2.imread('test_img_b.jpg')
+
+#Convert the image to gray scale so the gradient is better visible
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img = cv2.resize(img,(450,350))
+
+#Apply the horizontal sobel operator with a kernel size of 3
+sobelx = cv2.Sobel(img,cv2.CV_64F,1,0,ksize=3)
+
+#Apply the vertical sobel operator with a kernel size of 3
+sobely = cv2.Sobel(img,cv2.CV_64F,0,1,ksize=3)
+
+cv2.imshow('Original',img)
+```
+
+<div style="text-align:center"><img src="Edge%20detection/test_img_b.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.imshow('sobelx',sobelx)
+```
+
+<div style="text-align:center"><img src="Resources/sobelx_a.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.imshow('sobely',sobely)
+```
+
+<div style="text-align:center"><img src="Resources/sobely_a.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
