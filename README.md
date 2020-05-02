@@ -88,12 +88,17 @@ cv2.destroyAllWindows()
 
 Before going into color filtering you need to understand the concept of space colors, we are going to use it pretty much during the course, also it will help you to experiment with different color spaces for different applications. A space color is no more than a three-dimensional model that tries to describe the human perception known as color, where the coordinates of the model will define an specific color. One of them that you may know is the RGB, where all the colors are created mixing red, green and blue (Python works with a quite different model of RGB, inverting the order of the colors, so the final model is BGR).
 
-<div style="text-align:center"><img src="Resources/RGB.png" width = 35% /></div>
+<div style="text-align:center"><img src="Resources/RGB.png" width = 25% /></div>
 <br>
 
 Just like we said at the beginning of the course, one of the main objetives is to detect colors in images, for this specific tasks we will use a color space know as HSV (Hue Saturation Value), that is a closer model of how humans percieve colors, this a non linear model of RGB with cilindric coordinates. 
 
-<div style="text-align:center"><img src="Resources/HSV.png" width = 35% /></div>
+<div style="text-align:center"><img src="Resources/HSV.png" width = 25% /></div>
+<br>
+
+For the next exercise we will apply a color filter to the next image, the main idea is to pull apart each of the three colors.
+
+<div style="text-align:center"><img src="Color%20Filtering/Filtering.png" width = 15% /></div>
 <br>
 
 ###### *Color Filtering/main.py*
