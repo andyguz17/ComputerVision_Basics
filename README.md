@@ -96,7 +96,7 @@ Just like we said at the beginning of the course, one of the main objetives is t
 <div style="text-align:center"><img src="Resources/HSV.png" width = 35% /></div>
 <br>
 
-
+###### *Color Filtering/main.py*
 ```Python
 import cv2
 
@@ -143,16 +143,21 @@ cv2.imshow('Green',res_g)
 ```
 <div style="text-align:center"><img src="Resources/green.png" width = 20% /></div>
 <br>
+
 ```Python
 cv2.imshow('Red',res_r)
 ```
+
 <div style="text-align:center"><img src="Resources/red.png" width = 20% /></div>
 <br>
+
 ```Python
 cv2.imshow('Blue',res_b)
 ```
+
 <div style="text-align:center"><img src="Resources/blue.png" width = 20% /></div>
 <br>
+
 ```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
