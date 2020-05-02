@@ -140,9 +140,20 @@ res_g = cv2.bitwise_and(image,image, mask= mask_g)
 res_r = cv2.bitwise_and(image,image, mask= mask_r)
 
 cv2.imshow('Green',res_g)
+```
+<div style="text-align:center"><img src="Resources/green.png" width = 20% /></div>
+<br>
+```Python
 cv2.imshow('Red',res_r)
+```
+<div style="text-align:center"><img src="Resources/red.png" width = 20% /></div>
+<br>
+```Python
 cv2.imshow('Blue',res_b)
-
+```
+<div style="text-align:center"><img src="Resources/blue.png" width = 20% /></div>
+<br>
+```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
