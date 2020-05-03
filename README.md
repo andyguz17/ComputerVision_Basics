@@ -11,33 +11,33 @@ In this course we will talk about the basics of computer vision, in which we wil
 
 ## Computer vision in a nutshell 
 
-Computer vision commonly abbreviated as CV could be described as a field of study that allows a computer to analyze and have understanding of an uploaded digital image or group of images such as videos. 
+Computer vision, commonly abbreviated as CV, could be described as a field of study that allows a computer to analyze and have understanding of an uploaded digital image or group of images, such as videos. 
 
-The main idea of ​​CV along with robotics and other fields of study is to help and improve tasks that could be exhaustive or repetitive for humans. In recent years, there have been many improvements with the invention of complex computer vision and deep learning systems, such as the well-known convolutional neural networks, which changed the point of view to solve many problems, such as facial recognition or medical images among others. 
+The main idea of ​​CV, along with robotics and other fields of study, is to improve tasks that could be exhaustive or repetitive for humans. In recent years, there have been many improvements with the invention of complex computer vision and deep learning systems, such as the well-known convolutional neural networks. These inventions shifted the point of view to solve many problems, such as facial recognition or medical images. 
 
-For this course in specific we are going to make use of python 3.5 and opencv 3, despite this python version can be considered a little old, is a very stable version, however fell free to change to newest versions like python 3.7, some features may change, but it keeps the main idea. 
+For this course specifically,we are going to use of python 3.5 and opencv 3.  Although this python version could be considered  outdated, it is a very stable version. However,  feel free to change to newest versions like python 3.7.  Some features may change, but it keeps the main idea.
 
 
 ### Images
 
-First of all we need to understand what exactly an image, colloquially we could describe it as a visual representation of something that itself is a set of many characteristics as color, shapes, etc. For a computer an image could be better described as a matrix, in which every value is considered a pixel, so when your a talking about a 1080p image resolution, you´re refering to an specific 1080*1920 px matrix.
+First of all, we need to understand what exactly an image is. Colloquially, we could describe it as a visual representation of something that by itself is a set of many characteristics as color, shapes, etc. For a computer, an image could be better described as a matrix, in which every value is considered a pixel, so when you are talking about a 1080p image resolution, you are referring to an specific 1080x1920 px matrix
 
 ### Color 
 <div style="text-align:center"><img src="Resources/Color_Channels.png" width = 35% /></div>
 
-In the case of a colored image, we are talking about a three-dimmensional matrix where each dimension corresponds to an specific color chanel (Red, green, blue), the dimensions of this matrix will be different for different color spaces which we will discuss further in the course. 
+In the case of a colored image, we are talking about a three-dimensional matrix where each dimension corresponds to an specific color channel (Red, green, blue). The dimensions of this matrix will be different for different color spaces, which we will discuss further in the course. 
 
-We can describe an image in many more complex ways, like the color construction that is a result mainly of the light over the object surface, when we have something black it is actually the lack of light, the color formation will depend on the wavelength of the main components of the white light, the infrared and ultraviolet rays. 
+We can describe an image in many more complex ways, like the color construction that is a result mainly of the light over the object surface. When we have something black, it is actually the lack of light.  The color formation will depend on the wavelength of the main components of white light.
 
-If you like physics as much as I you will find an interesting phenomenon where the color deformation can be seen, the stars, in many pictures of the space you can see that the rock formations that are way too far from us has a red color while the closest ones has a blue color, this phenomenom was discovered by the North American Astronomer Edwin Hubble in 1929, we know that the space is in constant expansion, so if the sapce is deformed, the light that we receive from those stars will suffer from that expansion too, in consequence the wavelenght of the light will be higher and the color we perceive will have a red tone instead of a blue one for example. 
+If you like physics as much as I do, you will find interesting a phenomenon where the color deformation can be seen: the stars. In many pictures of space, you can see that the rock formations that are far from us have a red color, while the closest ones have a blue color. This phenomenon was discovered by the North American astronomer Edwin Hubble in 1929. We know that the space is in constant expansion, so if the space is deformed, the light that we receive from those stars will suffer from that expansion too. As a consequence the wavelength of the light will be higher and the color we perceive will have a red tone instead of a blue one.
 
 <div style="text-align:center"><img src="Resources/nasa_Spiral.jpg" width = 35% /></div>
 <br>
-I don´t want to go much deeper on the color formations and theory of it, the main idea is so you can know what are we going to work with for the rest of the course, anyway it will be helpfull if you want to do a more profound research on this topics, that I consider are really interesting. 
+I don't want to go much deeper on the color formations and theory of it.The main idea is so you can understand the basis of what are we going to work with for the rest of the course. It will be  helpful if you want to do a more profound research on this topic, that I consider really interesting. 
 
 ### Going into practice! 
 
-Ok, so now that you have a brief introduction about what computer vision is, and a little background of image formation, it's time to describe one of the basics tasks of CV, **color filtering**, which means you will want to extract from an image the information of an specific color, but before that we will see some basic operations with opencv so you can get acquainted with this library, and understand the code ahead. 
+Ok, so now that you have a brief introduction about what computer vision is, and a little background of image formation, it's time to describe one of the basics tasks of CV, **color filtering**. Color filtering is extracting from an image the information of an specific color. Before that, we will see some basic operations with opencv so you can get acquainted with this library, and understand the code ahead.
 
 #### Loading an image 
 
@@ -86,17 +86,17 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 
-Before going into color filtering you need to understand the concept of space colors, we are going to use it pretty much during the course, also it will help you to experiment with different color spaces for different applications. A space color is no more than a three-dimensional model that tries to describe the human perception known as color, where the coordinates of the model will define an specific color. One of them that you may know is the RGB, where all the colors are created mixing red, green and blue (Python works with a quite different model of RGB, inverting the order of the colors, so the final model is BGR).
+Before going into color filtering, you need to understand the concept of space colors. We are going to use it often during the course. Additionally, it will help you to experiment with different color spaces for different applications. A space color is no more than a three-dimensional model that tries to describe the human perception known as color, where the coordinates of the model will define an specific color. One of them that you may know is the RGB, where all the colors are created by mixing red, green and blue (Python works with a quite different model of RGB, inverting the order of the colors, so the final model is BGR).
 
 <div style="text-align:center"><img src="Resources/RGB.png" width = 25% /></div>
 <br>
 
-Just like we said at the beginning of the course, one of the main objetives is to detect colors in images, for this specific tasks we will use a color space know as HSV (Hue Saturation Value), that is a closer model of how humans percieve colors, this a non linear model of RGB with cilindric coordinates. 
+Just like we said at the beginning of the course, one of the main objectives is to detect colors in images. For this specific task, we will use a color space know as HSV (Hue Saturation Value) that is a closer model of how humans perceive colors, this a non linear model of RGB with cylindrical coordinates.
 
 <div style="text-align:center"><img src="Resources/HSV.png" width = 25% /></div>
 <br>
 
-For the next exercise we will apply a color filter to the next image, the main idea is to pull apart each of the three colors.
+For the next exercise, we will apply a color filter to the next image. The main idea of this exercise is to pull apart each of the three colors.
 
 <div style="text-align:center"><img src="Color%20Filtering/Filtering.png" width = 15% /></div>
 <br>
@@ -169,9 +169,9 @@ cv2.destroyAllWindows()
 
 #### Edge Detection 
 
-The edge detection in image proccesing world is very important, it facilitates the object recognition, region segmentation of images, among others. The edges are places of the image where an abrupt change in the levels of gray exists.
+The edge detection in the image processing world is very important because it facilitates the object recognition, region segmentation of images, and many other tasks. The edges are places of the image where an abrupt change in the levels of gray exists.
 
-For this next chapter we are going to work with edge detection, two of the most common algorithms are the canny detector which uses convolution masks and is based on the first derivative. In the second part we will work with is the sobel operator same that work with convolutions (It should be noted that the canny detector uses the sobel operator to get the first derivative in the horizontal and vertical direction for the gradient). 
+For this next chapter, we are going to work with edge detection. In first place we will talk about the canny detector, which uses convolution masks and is based on the first derivative, In second place is the sobel operator,  which also works with convolutions. (It should be noted that the canny detector uses the sobel operator to get the first derivative in the horizontal and vertical direction for the gradient).
 
 ##### Canny edge detection
 *For better understanding of the canny edge detector you can visit the <a href="https://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html">Opencv Page</a>*
@@ -208,11 +208,11 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-The ```minV``` and ```maxV``` are considered the limits of intensty gradient, it means that if the gradient intesity is lower than ```minV``` are considered non-edges so they will be discarded, if the value is higher than ```maxV``` are considered borders, and finally those who are in between the limits will be considered edges or non-edges deppending on their connectivity.
+The ```minV``` and ```maxV``` are considered the limits of intensity gradient. This means that if the gradient intesity is lower than ```minV```,  this part of the image are considered non-edges so they will be discarded. If the value is higher than ```maxV```, the they are considered borders. Finally,  those who are in between the limits will be considered edges or non-edges depending on their connectivity.
 
 ##### Sobel Operator
 
-The sobel operator is used in the image processing specialy in edge detection algorithms, the operator calculates the intensity gradient of an image in every píxel using the convolution function, the results shows the intensity magnitud changes that copuld be considered as edges (the convolution is a mathematical operation that can be widely used in the signal processing as a filter, it transforms a two functions into a third one representing somehow how much does it change the second function with respect to the first one).
+The sobel operator is used in image processing,especially in edge detection algorithms. The operator calculates the intensity gradient of an image in every píxel using the convolution function, and the result shows the intensity magnitude changes that could be considered edges. (The convolution is a mathematical operation that can be widely used in the signal processing as a filter - it transforms a two functions into a third one representing how much it changes the second function with respect to the first one).
 
 ###### *Edge detection/sobelA.py*
 ```Python
@@ -256,7 +256,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-This is the method that is already built in Opencv, for better understanding of the sobel operator we can create our own sobel operators and use the convolution to extract the gradients, to find the same results. The Sobel kernels are the following: 
+This is the method that is already built in Opencv. For Better understanding of the sobel operator we can create our own sobel operators and use the convolution to extract the gradients, to find the same results. The Sobel kernels are the following:
 
 <div style="text-align:center"><img src="Resources/sobel_operators.png" width = 40% /></div>
 <br>
@@ -305,13 +305,13 @@ cv2.imshow('sobely',y_conv)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
-As you can see the results are basically the same, the convolution is a method of filtering images that has been used in the last years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of <img src="https://render.githubusercontent.com/render/math?math=3x3"> you can have many <img src="https://render.githubusercontent.com/render/math?math=n"> dimensional kernels of <img src="https://render.githubusercontent.com/render/math?math=mxm"> size, and its values are not fixed, they're variables that can be trained for any purpose, under this idea you could be able to train a filtering model that can detect almost anything want, pretty awesome no? 
+As you can see, the results are basically the same. The convolution is a method of filtering images that has been used in the last few years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of <img src="https://render.githubusercontent.com/render/math?math=3x3"> you can have many <img src="https://render.githubusercontent.com/render/math?math=n"> dimensional kernels of <img src="https://render.githubusercontent.com/render/math?math=mxm"> size, and its values are not fixed, they're variables that can be trained for any purpose. Under this idea you could train a filtering model that can detect almost anything you want. Pretty awesome, right? 
 
-Feel free to play and experiment with the upper code, a good exercise for the understanding can be changing the values of the kernels, and also adding more dimensions to the matrix to see what happens. 
+Feel free to play and experiment with the upper code.It is a good exercise to understand what happens when  changing the values of the kernels.Try to add more dimensions to the matrix as well and see what happens.
 
 #### Morphological Transformations 
 
-Morphological transformations are in personal opinion one of the most important operations in image processing, that can be helpfull with noise supression in images and other tasks, this are simple operations based on the image form commonly applicated over a binary image. This works with a matrix kernel that can be for example a <img src="https://render.githubusercontent.com/render/math?math=5x5"> matrix of ones, 4 of the most common morphological transformations are: 
+Morphological transformations are in my personal opinion one of the most important operations in image processing, because they can be helpful with noise suppression in images and other tasks. These are simple operations based on the image form commonly applicated over a binary image. This works with a matrix kernel that can be, for example, a <img src="https://render.githubusercontent.com/render/math?math=5x5"> matrix of ones. 4 of the most common morphological transformations are:
 
 - Erosion
 - Dilation
@@ -359,7 +359,7 @@ cv2.imshow('Erosion',erosion)
 <div style="text-align:center"><img src="Resources/erosion.jpg" width = 30% /></div>
 <br>
 
-The erotion transformation provoque the blacks to be wider than the original image.
+The erosion transformation provoke the blacks to be wider than the original image.
 ```Python
 cv2.imshow('Dilation',dilation)
 ```
@@ -367,7 +367,7 @@ cv2.imshow('Dilation',dilation)
 <div style="text-align:center"><img src="Resources/dilation.jpg" width = 30% /></div>
 <br>
 
-Unlike the erosion, the dilation provoques the withes to be wider, as you can see the borders of the circle became thinner. 
+Unlike the erosion, the dilation provokes the widths to be wider. As you can see, the borders of the circle became thinner.
 
 ```Python
 cv2.imshow('Opening',opening)
@@ -376,7 +376,7 @@ cv2.imshow('Opening',opening)
 <div style="text-align:center"><img src="Resources/closing.jpg" width = 30% /></div>
 <br>
 
-The Opening and the closing are my favourites, they help to eliminate little dots that can be considerewd noise in the image, in the case of the opening it take little black dots as noise and supress them.
+The opening and the closing are my favourites, because they help to eliminate little dots that can be considered noise in the image. In the case of the opening it sees  the little black dots as noise and suppresses them.
 
 ```Python
 cv2.imshow('Closing',closing)
@@ -385,11 +385,11 @@ cv2.imshow('Closing',closing)
 <div style="text-align:center"><img src="Resources/opening.jpg" width = 30% /></div>
 <br>
 
-The closing is similar to the opening, it works with white noise. As you can see the inner white dots in the circle were almos eliminated from the image.
+The closing is similar to the opening, but it works with white noise. As you can see, the inner white dots in the circle were almost totally eliminated from the image.
 
 ```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-You can modify the parameters of the transformations to make the effect of them strongher or weaker, it will depend on the application you want. 
+You can modify the parameters of the transformations to make the effect of them stronger or weaker, it will depend on the application you want.
