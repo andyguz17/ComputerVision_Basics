@@ -303,6 +303,6 @@ cv2.imshow('sobely',y_conv)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
-As you can see the results are basically the same, the convolution is a method of filtering images that has been used in the last years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of $3x3$ you can have many $n$ dimensional kernels of $mxm$ size, and its values are not fixed, they're variables that can be trained for any purpose, under this idea you could be able to train a filtering model that can detect almost anything want, pretty awesome no? 
+As you can see the results are basically the same, the convolution is a method of filtering images that has been used in the last years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of <img src="https://render.githubusercontent.com/render/math?math=3x3"> you can have many <img src="https://render.githubusercontent.com/render/math?math=n"> dimensional kernels of <img src="https://render.githubusercontent.com/render/math?math=mxm"> size, and its values are not fixed, they're variables that can be trained for any purpose, under this idea you could be able to train a filtering model that can detect almost anything want, pretty awesome no? 
 
 Feel free to play and experiment with the upper code, a good exercise for the understanding can be changing the values of the kernels, and also adding more dimensions to the matrix to see what happens. 
