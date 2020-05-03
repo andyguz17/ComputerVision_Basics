@@ -174,7 +174,7 @@ For this next chapter we are going to work with edge detection, two of the most 
 ##### Canny edge detection
 *For better understanding of the canny edge detector you can visit the <a href="https://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html">Opencv Page</a>*
 
-###### *Edge detection/main.py*
+###### *Edge detection/canny.py*
 ```Python
 import cv2
 import numpy as np 
@@ -210,7 +210,9 @@ The ```minV``` and ```maxV``` are considered the limits of intensty gradient, it
 
 ##### Sobel Operator
 
+The sobel operator is used in the image processing specialy in edge detection algorithms, the operator calculates the intensity gradient of an image in every píxel using the convolution function, the results shows the intensity magnitud changes that copuld be considered as edges (the convolution is a mathematical operation that can be widely used in the signal processing as a filter, it transforms a two functions into a third one representing somehow how much does it change the second function with respect to the first one).
 
+###### *Edge detection/sobelA.py*
 ```Python
 import cv2
 import numpy as np
@@ -251,3 +253,56 @@ cv2.imshow('sobely',sobely)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
+
+This is the method that is already built in Opencv, for better understanding of the sobel operator we can create our own sobel operators and use the convolution to extract the gradients, to find the same results. The Sobel kernels are the following: 
+
+<div style="text-align:center"><img src="Resources/sobel_operators.png" width = 40% /></div>
+<br>
+
+###### *Edge Detection/sobelB.py* 
+```Python
+import cv2
+import numpy as np
+
+img = cv2.imread('test_img_b.jpg')
+
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img = cv2.resize(img,(450,350))
+
+#Here we define the sobel operators
+#This are no more than a numpy matrix
+kernel_x = np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
+kernel_y = np.array([[-1,0,1],[-2,-0,2],[-1,0,1]])
+
+#This part is where the magic happens
+#We convolve the image read with the kernels defined
+x_conv = cv2.filter2D(img,-1,kernel_x)
+y_conv = cv2.filter2D(img,-1,kernel_y)
+
+cv2.imshow('Original',img)
+```
+
+<div style="text-align:center"><img src="Edge%20detection/test_img_b.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.imshow('sobelx',x_conv)
+```
+
+<div style="text-align:center"><img src="Resources/sobelx_b.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.imshow('sobely',y_conv)
+```
+
+<div style="text-align:center"><img src="Resources/sobely_b.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+As you can see the results are basically the same, the convolution is a method of filtering images that has been used in the last years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of $3x3$ you can have many $n$ dimensional kernels of $mxm$ size, and its values are not fixed, they're variables that can be trained for any purpose, under this idea you could be able to train a filtering model that can detect almost anything want, pretty awesome no? 
+
+Feel free to play and experiment with the upper code, a good exercise for the understanding can be changing the values of the kernels, and also adding more dimensions to the matrix to see what happens. 
