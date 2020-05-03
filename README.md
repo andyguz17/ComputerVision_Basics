@@ -131,12 +131,14 @@ max_blue = np.array([120,255,255])
 
 #This is the actual color detection 
 #Here we will create a mask that contains only the colors defined in your limits
-#This mask has only one dimention, so its black and white }
+#This mask is binary
 mask_g = cv2.inRange(hsv, min_green, max_green)
 mask_r = cv2.inRange(hsv, min_red, max_red)
 mask_b = cv2.inRange(hsv, min_blue, max_blue)
 
 #We use the mask with the original image to get the colored post-processed image
+#This is not more than a "AND" operation with the mask, so everything that 
+#has a 0 value on the mask, will be 0 in the result as well.
 res_b = cv2.bitwise_and(image, image, mask= mask_b)
 res_g = cv2.bitwise_and(image,image, mask= mask_g)
 res_r = cv2.bitwise_and(image,image, mask= mask_r)
@@ -306,3 +308,88 @@ cv2.destroyAllWindows()
 As you can see the results are basically the same, the convolution is a method of filtering images that has been used in the last years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of <img src="https://render.githubusercontent.com/render/math?math=3x3"> you can have many <img src="https://render.githubusercontent.com/render/math?math=n"> dimensional kernels of <img src="https://render.githubusercontent.com/render/math?math=mxm"> size, and its values are not fixed, they're variables that can be trained for any purpose, under this idea you could be able to train a filtering model that can detect almost anything want, pretty awesome no? 
 
 Feel free to play and experiment with the upper code, a good exercise for the understanding can be changing the values of the kernels, and also adding more dimensions to the matrix to see what happens. 
+
+#### Morphological Transformations 
+
+Morphological transformations are in personal opinion one of the most important operations in image processing, that can be helpfull with noise supression in images and other tasks, this are simple operations based on the image form commonly applicated over a binary image. This works with a matrix kernel that can be for example a <img src="https://render.githubusercontent.com/render/math?math=5x5"> matrix of ones, 4 of the most common morphological transformations are: 
+
+- Erosion
+- Dilation
+- Opening 
+- Closing 
+  
+*More information about morphological transformations can be found in the <a href="https://docs.opencv.org/trunk/d9/d61/tutorial_py_morphological_ops.html">Opencv Page</a>.*
+
+###### *Transformations/main.py* 
+
+```Python
+import cv2
+import numpy as np
+
+#Read the image in grayscale 
+img = cv2.imread('world.png',0)
+img = cv2.resize(img,(450,450))
+
+#Define a kernel for the erosion 
+kernel_a = np.ones((5,5),np.uint8)
+erosion = cv2.erode(img,kernel_a,iterations = 1)
+
+#Define a kernel for the dilation
+kernel_b = np.ones((3,3),np.uint8)
+dilation = cv2.dilate(img,kernel_b,iterations = 1)
+
+#Define a kernel for the opening
+kernel_c = np.ones((7,7),np.uint8)
+opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel_c)
+
+#Define a kernel for the closing
+kernel_d = np.ones((7,7),np.uint8)
+closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel_d)
+
+cv2.imshow('Original',img)
+```
+
+<div style="text-align:center"><img src="/Transformations/world.png" width = 30% /></div>
+<br>
+
+```Python
+cv2.imshow('Erosion',erosion)
+```
+
+<div style="text-align:center"><img src="Resources/erosion.jpg" width = 30% /></div>
+<br>
+
+The erotion transformation provoque the blacks to be wider than the original image.
+```Python
+cv2.imshow('Dilation',dilation)
+```
+
+<div style="text-align:center"><img src="Resources/dilation.jpg" width = 30% /></div>
+<br>
+
+Unlike the erosion, the dilation provoques the withes to be wider, as you can see the borders of the circle became thinner. 
+
+```Python
+cv2.imshow('Opening',opening)
+```
+
+<div style="text-align:center"><img src="Resources/closing.jpg" width = 30% /></div>
+<br>
+
+The Opening and the closing are my favourites, they help to eliminate little dots that can be considerewd noise in the image, in the case of the opening it take little black dots as noise and supress them.
+
+```Python
+cv2.imshow('Closing',closing)
+```
+
+<div style="text-align:center"><img src="Resources/opening.jpg" width = 30% /></div>
+<br>
+
+The closing is similar to the opening, it works with white noise. As you can see the inner white dots in the circle were almos eliminated from the image.
+
+```Python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+You can modify the parameters of the transformations to make the effect of them strongher or weaker, it will depend on the application you want. 
