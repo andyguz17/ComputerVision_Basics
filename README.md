@@ -1,11 +1,13 @@
 #  Computer Vision Basics
 
 ### Chapter 1
+*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%20%201">Go to chapter 1</a>*
 - Color Spaces and color filtering 
 - Edge detection with Canny and the sobel operator 
 - Morphological Transformations 
 
 ### Chapter 2 
+*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%20%201">Go to chapter 2</a>*
 - Binarization 
 - Blur and Gaussian Noise 
 - Face detection with Haar cascades 
