@@ -7,7 +7,7 @@
 - Morphological Transformations 
 
 ### Chapter 2 
-*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%20%201">Go to chapter 2</a>*
+*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%202">Go to chapter 2</a>*
 - Binarization 
 - Blur and Gaussian Noise 
 - Face detection with Haar cascades 
