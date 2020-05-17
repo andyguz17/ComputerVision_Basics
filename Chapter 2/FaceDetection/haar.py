@@ -29,12 +29,12 @@ faces_2 = face_cascade.detectMultiScale(gray_2, ScaleFactor, minNeighbors)
 for (x,y,w,h) in faces:
     #For every coordinate we will draw a rectangle in the original image
     cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,0),2)
-    roi_color = img[y:y+h, x:x+w]
+    roi = img[y:y+h, x:x+w]
 
 #same for the second image 
 for (x,y,w,h) in faces_2:
     cv2.rectangle(img_2,(x,y),(x+w,y+h),(255,255,0),2)
-    roi_color = img_2[y:y+h, x:x+w]  
+    roi = img_2[y:y+h, x:x+w]  
 
 cv2.imshow('Face',img)
 cv2.imshow('Faces',img_2)
