@@ -1,3 +1,4 @@
+
 import numpy as np
 import cv2
 
@@ -19,7 +20,7 @@ ScaleFactor = 1.2
 
 #Just like the name says this wil determine the number of neighbors 
 #to a higher value, the model will be more selective 
-minNeighbors = 4
+minNeighbors = 5
 
 #We apply the cascades too our grayscaled images
 faces = face_cascade.detectMultiScale(gray, ScaleFactor, minNeighbors)
@@ -38,9 +39,6 @@ for (x,y,w,h) in faces_2:
 
 cv2.imshow('Face',img)
 cv2.imshow('Faces',img_2)
-
-cv2.imwrite('face_1.jpg',img)
-cv2.imwrite('faces_2.jpg',img_2)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
