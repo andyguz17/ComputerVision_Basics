@@ -191,10 +191,12 @@ for (xA, yA, xB, yB) in boxes:
 cv2.imshow('frame_2',img)
 ```
 <div style="text-align:center"><img src="Resources/detected.jpg" width = 25% /></div>
-```python
+
+```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
+
 As I mentioned before we can use the *Skimage* library to visualize the HOG features. 
 
 ###### *Histogram of Oriented Gradients/histogram.py* 
