@@ -103,7 +103,7 @@ If we apply the sobel kernel convolution to this image we will acquire this grad
 
 The gradients ar positive only for the changes from dark to light, otherwhise the sign of the gradient is negative. We can calculate this gradient manually, we can extract a block of 3x3 and use simple substraction between points. 
 
-<div style="text-align:center"><img src="Resources/grad.png" width = 50% /></div>      
+<div style="text-align:center"><img src="Resources/Grad.png" width = 50% /></div>      
 
 For the <img src="https://render.githubusercontent.com/render/math?math=\large X"> gradient:
 <img src="https://render.githubusercontent.com/render/math?math=\large X = 255 - 0">
@@ -141,3 +141,5 @@ Now that we have a samller segmentation what we need to do is order our 64 vecto
 In this way we can calculate the histogram of oriented gradients for every block of the image
 
 <div style="text-align:center"><img src="Resources/im_hist.png" width = 30% /></div>
+
+For every block we have a vector of dimension 9, that are the main characteristics that we want to extract from the image, using this descriptors we can train any machine learning algorithm so it can help to detect a desired object in a image. A good way to detect people is using HOG. 
