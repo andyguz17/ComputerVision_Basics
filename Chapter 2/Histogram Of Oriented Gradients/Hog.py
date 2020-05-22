@@ -3,32 +3,25 @@ from skimage import exposure
 from skimage import feature
 import cv2
  
-# initialize the HOG descriptor/person detector
+# Lets initialize the HOG descriptor
 hog = cv2.HOGDescriptor()
+
+#We set the hog descriptor as a People detector
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
-cv2.startWindowThread()
-img_2 = cv2.imread('test_e.jpg')
+img = cv2.imread('test_e.jpg')
 
-#Size for the image 
+#The image is pretty big so we will gibve it a resize
 imX = 720
 imY = 1080
+img = cv2.resize(img,(imX,imY))
 
-img_2 = cv2.resize(img_2,(imX,imY))
+#We will define de 8x8 blocks in the winStride
+boxes, weights = hog.detectMultiScale(img, winStride=(8,8))
+boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
-gray_2 = cv2.cvtColor(img_2, cv2.COLOR_RGB2GRAY)
 
-boxes_2, weights_2 = hog.detectMultiScale(img_2, winStride=(8,8) )
-boxes_2 = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes_2])
-
-(H, hogImage) = feature.hog(img_2, orientations=9, pixels_per_cell=(8, 8),
-	cells_per_block=(2, 2), transform_sqrt=True, block_norm="L1",
-	visualize=True)
-
-hogImage = exposure.rescale_intensity(hogImage, out_range=(0, 255))
-hogImage = hogImage.astype("uint8")
-
-for (xA, yA, xB, yB) in boxes_2:
+for (xA, yA, xB, yB) in boxes:
     
     #Center in X 
     medX = xB - xA 
@@ -39,15 +32,13 @@ for (xA, yA, xB, yB) in boxes_2:
     yC = int(yA+(medY/2)) 
 
     #Draw a circle in the center of the box 
-    cv2.circle(img_2,(xC,yC), 1, (0,255,255), -1)
+    cv2.circle(img,(xC,yC), 1, (0,255,255), -1)
 
-    # display the detected boxes in the colour picture
-    cv2.rectangle(img_2, (xA, yA), (xB, yB),
+    # display the detected boxes in the original picture
+    cv2.rectangle(img, (xA, yA), (xB, yB),
                         (255, 255, 0), 2)    
 
-
-cv2.imshow('frame_2',img_2)
-cv2.imshow('features',hogImage)
+cv2.imshow('frame_2',img)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

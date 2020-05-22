@@ -143,3 +143,89 @@ In this way we can calculate the histogram of oriented gradients for every block
 <div style="text-align:center"><img src="Resources/im_hist.png" width = 30% /></div>
 
 For every block we have a vector of dimension 9, that are the main characteristics that we want to extract from the image, using this descriptors we can train any machine learning algorithm so it can help to detect a desired object in a image. A good way to detect people is using HOG. 
+
+Then we will learn how to apply a people detector using the hog algorithm with an opencv trained model, it is pretty accurate, also we will usea the *Skimage* library so yo can see the computation of the hog descriptors in a image.
+
+<div style="text-align:center"><img src="Resources/sobel.png" width = 80% /></div>
+
+The first step would be to calculate the sobel components of the image as can be shown in the image above, however, opencv help us with this task, it has an already trained people detector model working under the hog descriptor.
+###### *Histogram of Oriented Gradients/Hog.py* 
+```Python
+import numpy as np
+import cv2
+ 
+# Lets initialize the HOG descriptor
+hog = cv2.HOGDescriptor()
+
+#We set the hog descriptor as a People detector
+hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+img = cv2.imread('test_e.jpg')
+
+#The image is pretty big so we will gibve it a resize
+imX = 720
+imY = 1080
+img = cv2.resize(img,(imX,imY))
+
+#We will define de 8x8 blocks in the winStride
+boxes, weights = hog.detectMultiScale(img, winStride=(8,8))
+boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
+
+for (xA, yA, xB, yB) in boxes:
+    
+    #Center in X 
+    medX = xB - xA 
+    xC = int(xA+(medX/2)) 
+
+    #Center in Y
+    medY = yB - yA 
+    yC = int(yA+(medY/2)) 
+
+    #Draw a circle in the center of the box 
+    cv2.circle(img,(xC,yC), 1, (0,255,255), -1)
+
+    # display the detected boxes in the original picture
+    cv2.rectangle(img, (xA, yA), (xB, yB),
+                        (255, 255, 0), 2)    
+
+cv2.imshow('frame_2',img)
+```
+<div style="text-align:center"><img src="Resources/detected.jpg" width = 25% /></div>
+```python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+As I mentioned before we can use the *Skimage* library to visualize the HOG features. 
+
+###### *Histogram of Oriented Gradients/histogram.py* 
+```python
+import numpy as np
+from skimage import exposure 
+from skimage import feature
+import cv2
+ 
+img = cv2.imread('test_e.jpg')
+
+imX = 720
+imY = 1080
+img = cv2.resize(img,(imX,imY))
+```
+
+Here we define the main parameters of the model, the number of orientations will be 9 as we explained before. We will have 64 pixels per cell and now we can divide the blocks in cells of 16 * 16, so we define blocks as 2 by 2 each one of 8*8 pixels
+
+```python
+(H, hogImage) = feature.hog(img, orientations=9, pixels_per_cell=(8, 8),
+	cells_per_block=(2, 2), transform_sqrt=True, block_norm="L1",
+	visualize=True)
+
+hogImage = exposure.rescale_intensity(hogImage, out_range=(0, 255))
+hogImage = hogImage.astype("uint8")
+
+cv2.imshow('features',hogImage)
+```
+<div style="text-align:center"><img src="Resources/hog_f.jpg" width = 50% /></div>
+```python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+As you can see the silhouette of the person are very highlighted in the hog descriptor, using this vector values a support vector machine is trained to abstract what a person is, is pretty efficient, and you can use it to detect multiple objects that can rich in hog descriptors. Also a good idea could be to change the learning algorithm to neural networks and compare its performance against the svm. 
