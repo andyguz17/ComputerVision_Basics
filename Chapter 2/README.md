@@ -1,11 +1,16 @@
-### Face detection 
+# Object Detection 
 
-In the computer vision world one of the most important task is the classification, where you will want to detect certain objects in a image. For long time we always wanted a way to detect people, nowadays almost every single camera has a feature that detects people faces and it's pretty accurate. It´s even used in some social apps like snapchat, where an algorithm detects a face and extracts it´s characteristics. 
+In this chapter we will talk about two classic object classifiers: Haar Cascades (We will use them to detect faces on a image) and the Histogram of Oriented Gradients (Which we will use to detect people on images), both of them are based on machine learning Algorithms, the first one using AdaBoost ( Algorithm formulated by Yoav Freund and Robert Schapire), and the second one using Support Vector Machine algorithms(developed by Vladimir Vapnik).
+
+The idea that runs under both algorithm is to extract some important features from the images that can describe something we want, for example a car, the idea will be to extract some characteristics that a computer can interpret as a car, and then use these features to train a machine learning algorithm so it can generalize the abstraction of this desired object.
+
+## Haar Like Features
+
+In the computer vision world one of the most important task is the classification, where you want to detect certain objects on images. For a long time we always wanted a way to detect people, nowadays almost every single camera has a feature that detects people faces and it's pretty accurate. It´s even used in some social apps like snapchat, where an algorithm detects a face and extracts it´s characteristics. 
 
 A pretty good classifier algorithm that opencv has is the *Haar Cascade* which works with Haar Wavelets to analyze image pixels into squares, this was proposed by <a href="https://ieeexplore.ieee.org/abstract/document/990517">Viola & Jones</a> in 2001.This classifier work just like convolutions kernels, where we try to extract different features of the image with *"integral image"*. This uses the AdaBoost learning algorithm selecting small numbers of features from a large set of images.
 
-
-The main idea is that you can train this models to detect any object you want, similar to convolutional neural networks. In the code ahead you will learn how to use a trained model to detect faces in images (of course you can download more models to play with). 
+For this training what we really want is a big data set with positive Images (Images with the object desired) and negative images (Images without the desired object). The main idea is that you can train this models to detect any object you want, similar to convolutional neural networks. In the code ahead you will learn how to use a trained model to detect faces in images. 
 
 ###### *FaceDetection/haar.py*
 
@@ -75,3 +80,64 @@ cv2.destroyAllWindows()
 
 ```
 <a href="https://github.com/opencv/opencv/tree/master/data/haarcascades">Opencv</a> offers some pre-trained models, that are pretty fast and accurate, you can download the xml files and try them with some images you want. In personal opinion the face detection with Haar Cascades is really good, of course convolutional neural networks are more accurate but they use a lot of resources to work properly. A good approach if you want to use a face as a biometric patron,  would be to use a lightweight algorithm like Haar Cascades just to get the area of interest and then move this area to a convolutional neural network to get the face classifier. With this instead of analyzing all the image with CNN's you will analize  just a little area where you already known that a face is there.    
+
+
+## Histogram of Oriented Gradients (HOG)
+
+HOG is one the most famous features descriptor which is based on the gradients orientations of images, do you remeber the chapter one where we talked about sobee kernels to highlight borders, well the main idea of this algorithm is to use this gradients with them orientation to create histrograms boxes of the images, using these histograms as descriptors to train a support vector machine. We will go around this step by step so you can understand the functioning of this algorithm. 
+ 
+### Gradient calculation 
+
+So for this part we will make use of what we have learned in the first chapter, as we already know if we convolve an image with the sobel kernels we will enhance the borders of the images (this is because the edges denote the gradients of the images), in the parts of the image where the color are almost the same the gradient will tend to 0, meanwhile if there is a big change in the gradient the magnitud will be higher. 
+
+Lets suppose the next image:
+<div style="text-align:center"><img src="Resources/border.png" width = 28% /></div>
+
+As we can see we have positive an negative gradients going on, there is changes from black to white and white to black.
+
+<div style="text-align:center"><img src="Resources/lines.png" width = 35% /></div>
+
+If we apply the sobel kernel convolution to this image we will acquire this gradients for X and Y components.
+
+<div style="text-align:center"><img src="Resources/Components.png" width = 60% /></div>                                       
+
+The gradients ar positive only for the changes from dark to light, otherwhise the sign of the gradient is negative. We can calculate this gradient manually, we can extract a block of 3x3 and use simple substraction between points. 
+
+<div style="text-align:center"><img src="Resources/grad.png" width = 50% /></div>      
+
+For the <img src="https://render.githubusercontent.com/render/math?math=\large X"> gradient:
+<img src="https://render.githubusercontent.com/render/math?math=\large X = 255 - 0">
+<img src="https://render.githubusercontent.com/render/math?math=\large X = 255">
+
+For the <img src="https://render.githubusercontent.com/render/math?math=\large Y"> gradient:
+<img src="https://render.githubusercontent.com/render/math?math=\large Y = 0-255">
+<img src="https://render.githubusercontent.com/render/math?math=\large Y = -255">
+
+Once we have the components of the gradient we can calculate its magnitud and orientation.
+<div style="text-align:center"><img src="Resources/mag.png" width = 35% /></div>
+
+The magnitude of the gradient:
+<img src="https://render.githubusercontent.com/render/math?math=\large Gm =\sqrt((255)^2+(-255)^2)">
+<img src="https://render.githubusercontent.com/render/math?math=\large Gm = 360.6">
+
+And for the Orientation:
+<img src="https://render.githubusercontent.com/render/math?math=\large \theta =tan^{-1}-(255/255)">
+<img src="https://render.githubusercontent.com/render/math?math=\large \theta = -45">°
+
+### Creating the Histogram
+
+For this part we need to divide our image in blocks of dimension 8x8, it means we will have 64 gradient calculations per area, the main idea is to get this blocks all over the image, we will have an histogram of magnitud and orientation for each of this blocks.
+
+<div style="text-align:center"><img src="Resources/Blocks.png" width = 35% /></div>
+
+Once we get the blocks of gradients we need to reduce the number of characteristic features (gradient orientation), for this instead of saving all the values from 0° to 180° we will divide it in bins of 20° so we will get information of only 9 orientation values as shown in the following picture: 
+
+<div style="text-align:center"><img src="Resources/bins.png" width = 40% /></div>
+
+Now that we have a samller segmentation what we need to do is order our 64 vector magnitudes with it respective orientations into a histogram. For the values that are diferrent from the specified we need to ponderate them, for example for <img src="https://render.githubusercontent.com/render/math?math=\small \theta"> = 45°, the distance to 40 and 60 is 5 and 15 respectively, therefore the ratios will be 5/20 and 15/20, so the magnitud assigned wil be Gm\*1/4 for 40 and Gm\*3/4 for 60.   
+
+<div style="text-align:center"><img src="Resources/hist.png" width = 50% /></div>
+
+In this way we can calculate the histogram of oriented gradients for every block of the image
+
+<div style="text-align:center"><img src="Resources/im_hist.png" width = 30% /></div>
