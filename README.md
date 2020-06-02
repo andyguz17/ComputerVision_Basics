@@ -12,7 +12,7 @@
 - Histogram of Oriented Gradients (HOG)
 
 ### Feature Matching
-*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%202">Go to chapter 3</a>*
+*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Chapter%203">Go to chapter 3</a>*
 
 - Features from Accelerated Segment Test (FAST)
 - Binary Robust Independent Elementary Features (BRIEF)
