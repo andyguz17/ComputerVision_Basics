@@ -1,6 +1,4 @@
 import numpy as np
-from skimage import exposure 
-from skimage import feature
 import cv2
  
 # Lets initialize the HOG descriptor
