@@ -19,7 +19,7 @@ Working with Feature matching is pretty straightforward, in general we need to f
 
 This algorithm was introduced for first time in 2006 by Edward Rosten and Tom Drummond in their work *<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.60.3991&rep=rep1&type=pdf">Machine learning for high-speed corner detection</a>*, FAST is an algorithm developed to find corners in images, it works under the idea of the *<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.60.3991&rep=rep1&type=pdf">Bresenham Circle</a>*. Basically we want to select a point of the image, form a circle around it, and compare the intensity of the pixels of interest to see if the point selected is or not a corner, taking these corners as feature points. The advantaje of this algorithm is its high speed performance, so it can be easily applied to real time video analysis. 
 
-##### Bresenham circle and corner detection 
+#### Bresenham circle and corner detection 
 
 Just like I said before we want to select points of the images and compare its intensity with a bresenham circle drawed around the point as can be seen in the image following image. 
 
