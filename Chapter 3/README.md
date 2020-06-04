@@ -33,3 +33,87 @@ The first approximation of the algorithm will be comparing the intensity of **_p
 Remember that we have to apply this analysis to every single pixel of the image, so to increase the velocity of this algorithm instead of using a **_n = 12_** its used a **_n = 4_** each pixel corresponding to the cardinal points (taking the pixels 1, 5, 9 & 13 from the image above), in this way we will consider a point as a corner if at least 3 of this pixels are brighter than **_Ip+t_** or darker than **_Ip-t_**.
 
 The problem of this algorithm is that using a **_n < 12_**, in many cases we will have a lot of feature points, and using a higher number of pixels will affect the speed performance of the algorithm. For this reason the authors introduced a machine learning approach to solve the problem, making use of decition trees. 
+
+###### *Fast/fast.py* 
+```Python
+import cv2
+import numpy as np
+
+image = cv2.imread('corner_test_2.png')
+
+gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+fast = cv2.FastFeatureDetector_create() 
+
+#Keypoints using non Max Supression
+Keypoints_1 = fast.detect(gray, None)
+
+#Set non Max Supression disabled 
+fast.setNonmaxSuppression(False)
+
+#Keypoints without non max Suppression
+Keypoints_2 = fast.detect(gray, None)
+
+#Create tywo instances of the original image
+image_with_nonmax = np.copy(image)
+image_without_nonmax = np.copy(image)
+
+# Draw keypoints on top of the input image
+cv2.drawKeypoints(image, Keypoints_1, image_with_nonmax, color=(0,35,250))
+cv2.drawKeypoints(image, Keypoints_2, image_without_nonmax, color=(0,35,250))
+
+cv2.imshow('Non max supression',image_with_nonmax)
+```
+<div style="text-align:center"><img src="Resources/No_nonMaxSupresion.jpg" width = 50% /></div>
+
+```Python
+cv2.imshow('Without non max Supression',image_without_nonmax)
+```
+<div style="text-align:center"><img src="Resources/nonMaxSupresion.jpg" width = 50% /></div>
+
+```Python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+###### *Brief/brief.py* 
+```Python
+import cv2
+import numpy as np
+
+image = cv2.imread('corner_test_2.png')
+
+gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+fast = cv2.FastFeatureDetector_create() 
+brief = cv2.xfeatures2d.BriefDescriptorExtractor_create()
+
+#Set non Max Supression disabled 
+fast.setNonmaxSuppression(False)
+
+keypoints = fast.detect(gray, None)    
+brief_keypoints, descriptor = brief.compute(gray, keypoints)
+
+brief = np.copy(image)
+non_brief = np.copy(image)
+
+# Draw keypoints on top of the input image
+cv2.drawKeypoints(image, brief_keypoints, brief, color=(0,35,250))
+cv2.drawKeypoints(image, keypoints, non_brief, color=(0,35,250))
+
+cv2.imshow('Keypoints Before BRIEF',non_brief)
+```
+<div style="text-align:center"><img src="Resources/BeforeBRIEF.jpg" width = 50% /></div>
+
+```Python
+
+cv2.imshow('Keypoints after BRIEF',brief)
+
+```
+<div style="text-align:center"><img src="Resources/AfterBRIEF.jpg" width = 50% /></div>
+
+```Python
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
