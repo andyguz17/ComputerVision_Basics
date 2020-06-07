@@ -100,15 +100,15 @@ Where **_p(x)_** is the pixel intensity at the point **_x_**, choosing a set of 
 
 - **Uniform (I)** where the locations are evenly distributed over the patch and tests can lie close to the patch border.
 <div style="text-align:center"><img src="Resources/I.png" width = 20% /></div>
-<div style="text-align:center"><img src="Resources/uniform.png" width = 10% /></div>
+<div style="text-align:center"><img src="Resources/uniform.png" width = 20% /></div>
 
 - **Gaussian (II)** x and y follows is drawn by a Gaaussian distribution.  
 <div style="text-align:center"><img src="Resources/II.png" width = 20% /></div>
-<div style="text-align:center"><img src="Resources/Gauss_1.png" width = 10% /></div>
+<div style="text-align:center"><img src="Resources/Gauss_1.png" width = 20% /></div>
 
 - **Gaussian (III)** In this case we will follow two steps, being the first location. **_xi_** sampled from a Gaussian centered around the origin (This Gaussian is the same as the Gaussian above), while the second location is sampled from another Gaussian centered on **_xi_**. With this we are forcing the test to be more local. 
 <div style="text-align:center"><img src="Resources/III.png" width = 20% /></div>
-<div style="text-align:center"><img src="Resources/Gauss_2.png" width = 25% /></div>
+<div style="text-align:center"><img src="Resources/Gauss_2.png" width = 20% /></div>
 
 - **Coarse Polar Grid (IV)** The random pair is sampled from discrete locations of a coarse polargrid introducing a spatial quantization. 
 <div style="text-align:center"><img src="Resources/IV.png" width = 20% /></div>
@@ -117,7 +117,7 @@ Where **_p(x)_** is the pixel intensity at the point **_x_**, choosing a set of 
 <div style="text-align:center"><img src="Resources/V.png" width = 20% /></div>
  
 From all this samples the authors choosed to use the second model because of its small advantajes, using it for its experiments.  So finally the descriptor will be described as:
-<div style="text-align:center"><img src="Resources/descriptor.png" width = 30% /></div>
+<div style="text-align:center"><img src="Resources/descriptor.png" width = 20% /></div>
 
 One of the main advantajes of this descriptor is the high speed performance it offers, and also an accurate, despite it is not designed to be rotationally invariant it tollerates small amounts of rotation. 
 
