@@ -133,13 +133,6 @@ gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 fast = cv2.FastFeatureDetector_create() 
 brief = cv2.xfeatures2d.BriefDescriptorExtractor_create()
 
-#Set non Max Supression disabled 
-fast.setNonmaxSuppression(False)
-
-```
-In 
-```Python
-
 keypoints = fast.detect(gray, None)    
 brief_keypoints, descriptor = brief.compute(gray, keypoints)
 
