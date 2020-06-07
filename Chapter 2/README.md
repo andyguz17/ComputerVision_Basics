@@ -225,9 +225,12 @@ hogImage = hogImage.astype("uint8")
 
 cv2.imshow('features',hogImage)
 ```
+
 <div style="text-align:center"><img src="Resources/hog_f.jpg" width = 50% /></div>
+
 ```python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
+
 As you can see the silhouette of the person are very highlighted in the hog descriptor, using this vector values a support vector machine is trained to abstract what a person is, is pretty efficient, and you can use it to detect multiple objects that can rich in hog descriptors. Also a good idea could be to change the learning algorithm to neural networks and compare its performance against the svm. 
