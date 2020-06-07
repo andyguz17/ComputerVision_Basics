@@ -104,7 +104,7 @@ Where **_p(x)_** is the pixel intensity at the point **_x_**, choosing a set of 
 
 - **Gaussian (II)** x and y follows is drawn by a Gaaussian distribution.  
 <div style="text-align:center"><img src="Resources/II.png" width = 20% /></div>
-<div style="text-align:center"><img src="Resources/Gauss_1.png" width = 20% /></div>
+<div style="text-align:center"><img src="Resources/gauss_1.png" width = 20% /></div>
 
 - **Gaussian (III)** In this case we will follow two steps, being the first location. **_xi_** sampled from a Gaussian centered around the origin (This Gaussian is the same as the Gaussian above), while the second location is sampled from another Gaussian centered on **_xi_**. With this we are forcing the test to be more local. 
 <div style="text-align:center"><img src="Resources/III.png" width = 20% /></div>
