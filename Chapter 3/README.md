@@ -161,6 +161,53 @@ cv2.destroyAllWindows()
 ```
 
 ### Oriented FAST and Rotated BRIEF (ORB).
+
+<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.370.4395&rep=rep1&type=pdf">ORB: an efficient alternative to SIFT or SURF</a>
+
+So with ORB we will be able to get the keypoinst of an image and the descriptors via FAST and BRIEF respectively. We know that FAST does not have an orientation component, so ORB uses a multiScale Pyramid where each stage of the pyramid represents a downsampled version of the image in a previous level, after we have tyhe pyramid ORB runs FAST for every stage of the pyramid, with this we will achieve a kind of scale invariant algorithm. 
+
+<div style="text-align:center"><img src="Resources/pyramid.png" width = 40% /></div>
+
+###### FAST
+Once we located the points we need to assign its orientation depending on how the levels of intensity change around the keypoint. Orb uses a measure of corner orientation based on the intensity centroid, *"Using standard moments it is straightforward to determine the corner orientation"* (<a href="http://users.cs.cf.ac.uk/Paul.Rosin/corner2.pdf">Measuring Corner Properties, Paul L. Rosin</a>).
+
+Defining the moments as: 
+
+<div style="text-align:center"><img src="Resources/orb_f1.jpg" width = 25% /></div>
+
+then the centroid is determined by: 
+
+<div style="text-align:center"><img src="Resources/orb_f2.jpg" width = 20% /></div>
+
+Having the centroid we can construct a vector from the corners center to the centroid **OC**, then the patch orientation will be given by: 
+
+<div style="text-align:center"><img src="Resources/orb_f3.jpg" width = 20% /></div>
+
+So the vector Orientation will be something like: 
+
+<div style="text-align:center"><img src="Resources/centroid.png" width = 35% /></div>
+
+Once the orientation of the patch is calculated, we make a canonical rotation and construct the descriptor, and in some way obtain some rotation invariance.
+
+###### BRIEF
+First of all we need to consider that BRIEF is not invariant to rotation, so to fix this ORB uses rBRIEF (Rotation aware BRIEF), the idea is to add this functionality without losing the speed of the algorithm. 
+
+Si the idea of rBRIEF is to steer BRIEF according to the orientation of the keypoints obtained before. So for any feature set of ***n*** binary tests at location **_(xi,yi)_**, define a **_2xn_** matrix: 
+
+<div style="text-align:center"><img src="Resources/brief_f1.png" width = 20% /></div>
+
+we use the patch orientation <img src="https://render.githubusercontent.com/render/math?math=\theta"> and its corresponding rotation matrix <img src="https://render.githubusercontent.com/render/math?math=R\theta"> to construct a steered version <img src="https://render.githubusercontent.com/render/math?math=S \theta"> of <img src="https://render.githubusercontent.com/render/math?math=S">:
+
+<div style="text-align:center"><img src="Resources/brief_f2.png" width = 12% /></div>
+
+Then the steered BRIEF will be: 
+
+<div style="text-align:center"><img src="Resources/brief_f3.png" width = 30% /></div>
+
+Finally the authors discretize the angle to increments of <img src="https://render.githubusercontent.com/render/math?math=2\pi/30"> and construct a lookup table of precomputed BRIEF patterns. While the keypoint orientation <img src="https://render.githubusercontent.com/render/math?math=\theta"> is consistent across views, the correct set of points <img src="https://render.githubusercontent.com/render/math?math=S \theta"> will be used to compute its descriptor.
+
+In the code below we will use the ORB algorithm to detect the keypoints and descriptors of two images(the first one with only an object we desire to track, and the second one an image with the desired object in it but in a different enviroment). In second place we will use a bruteForce point Matcher to find similaritys in between the two images keypoints. In this we wil lbe able to detect the desired object in the second image.
+
 ###### *Orb/orb.py* 
 ```Python
 import cv2
