@@ -1,5 +1,15 @@
 # arTags (Augmented Reality)
 
+So augmented Reality Tags as its name implies, are square fiducial markers desgined to support augmented reality. They can be used to the apparition of virtual objects in real images, also they give us a good aproximation of the position and orientation of objects for robotics for example, it is a big area to explore and play with. For this module we are going to use the ArUco Library with opencv, developed by <a href="https://www.sciencedirect.com/science/article/abs/pii/S0031320314000235">Rafael Muñoz and Sergio Garrido</a>. 
+
+For first we are going to the creation of the tags, *an AruCo marker is a synthetic square marker composed by a wide black border and an inner binary matrix which determines its identifier (id)* -<a href="https://docs.opencv.org/trunk/d5/dae/tutorial_aruco_detection.html">Opencv docs</a>.
+
+<div style="text-align:center"><img src="arTags/Tags/image_3.jpg" width = 20% /></div>
+
+Opencv has some predefined dictionaries of AR markers that can be used for specific tasks, the consists simply of a list of binary codifications, which main caharacteristics are the size of the marker and the lenght of the dictionary.
+
+For the creation of the Tags we are going to use a dictionary of lenght 250 and markers with size of 6x6 (DICT_6x6_250).
+
 ###### arTags/Generate.py
 
 ```Python
@@ -17,9 +27,11 @@ if not(verify):
 
 #Initialize the dictionary
 aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
-
+```
+The parameters of this function are pretty straightforward, the first one is the dictionary we are going to use, this one was defined at the begining of the code *(DICT_6X6_250)*, the second parameter is the id that will be assigned, in this case we have a for loop so we will create 3 markers with the ids 0,1,2 and 3 respectively, finally the Size makes reference to the size of the output image, in this case will be 700x700 pixels.
+```Python
 for i in range(1, 4):
-    
+
     size = 700
     img = aruco.drawMarker(aruco_dict, i, size)
     
@@ -29,6 +41,11 @@ for i in range(1, 4):
     cv2.waitKey(0)
     cv2.destroyAllWindows
 ```
+Once you created the tags, you can paste them to a document and print them, so you can use them with real images, also you can create more than the 3 markers depending on the application you want. 
+
+For this course we are going to do a little example about augmented reality, replacing an area defined by 4 ArUco tags (being the center of each one the coordinates of a rectangle) with any image, so when the camera detects the markers an image will appear in our camera.
+
+First of all we are going to do an aproximation though Polylines, what I mean with this is that we are going to extract the centers of every marker and join them with lines to form a rectangle and that specific area. 
 
 ###### arTags/PPolygon.py 
 
@@ -64,11 +81,18 @@ parameters =  aruco.DetectorParameters_create()
 
 #Detect the corners and id's in the examples 
 corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+
+#First we need to detect the markers itself, so we can later work with the coordinates we have for each.
 frame_markers = aruco.drawDetectedMarkers(image.copy(), corners, ids)
 
 #Show the markers detected
 cv2.imshow('markers',frame_markers)
 
+```
+<div style="text-align:center"><img src="Resources/markers.jpg" width = 85% /></div>
+As can you see for this example we used random id markers, for the detection we can observe that we have 4 markers with Id´s 1,4,7 and 10, for this specific example the ids doesn´t really matter, cause what we really want is the position of them independently of its ID. Once we got the detection, we will be able to calculate the center of them, with the algorithm we created a corners array where are stored the coordinates of the 16 corners in the image. 
+
+```Python
 #Initialize an empty list for the coordinates 
 params = []
 
@@ -90,6 +114,13 @@ params = np.array(params)
 cv2.drawContours(image,[params],-1 ,(255,0,150),-1)
 
 cv2.imshow('no_conversion',image)
+```
+
+<div style="text-align:center"><img src="Resources/no_conversion.jpg" width = 85% /></div>
+
+As can you see in the image, the polygon drawn in the image is very sensitive to the order of the parameters given, in this moment our parameters list is in the order 7 ,1 ,4 ,10  so it will draw this strange figure, so we need to order our the array so the points are correlative like for example 4, 10, 1, 7. 
+
+```Python
 
 if(len(params)>=4):
     #Sort the coordinates
@@ -99,9 +130,15 @@ if(len(params)>=4):
 cv2.drawContours(image,[params],-1 ,(255,0,150),-1)
 
 cv2.imshow('detection',image)
+```
+
+<div style="text-align:center"><img src="Resources/detection.jpg" width = 85% /></div>
+
+```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
+Now that we have an idea of the extraction of the coordinates to dget an specific area 
 
 ###### arTags/PPolygon.py 
 
