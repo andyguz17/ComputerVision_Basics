@@ -138,7 +138,7 @@ cv2.imshow('detection',image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
-Now that we have an idea of the extraction of the coordinates to dget an specific area 
+Now that we have an idea of the extraction of the coordinates to draw a rectangle in a specific position, we can use this approximation to replace this purple area with a desired virtual media we want just like a photo of the earth! 
 
 ###### arTags/PPolygon.py 
 
@@ -201,7 +201,10 @@ for i in range(len(ids)):
 
 #Transfom the coordinates list to an array
 params = np.array(params)
+```
+In the previous code we sorted the coordinates to an specific order, for this part we need this order and also  a second sort changing the position 2 and 3 of the array, this is done just for the algorithm to work well, when we work with the convexPoly it works with different order than the warped image with the homography. This variation can be seen in the function "order coordinates". 
 
+```Python
 if(len(params)>=4):
     #Sort model 1 
     params = order_coordinates(params,False)
@@ -229,15 +232,30 @@ mask = np.zeros([int(h*0.7), int(w*0.7),3], dtype=np.uint8)
 #To the black mask we will replace the area described by the ar tags with white 
 cv2.fillConvexPoly(mask, np.int32([params]), (255, 255, 255), cv2.LINE_AA)
 cv2.imshow('black mask',mask)
+```
+
+<div style="text-align:center"><img src="Resources/black_mask.jpg" width = 85% /></div>
+
+```Python
 
 #We will calculate the difference between the original image and the mask to obtain a black space(No color) in the desired area
 substraction = cv2.subtract(image,mask)
 cv2.imshow('substraction',substraction)
+```
+
+<div style="text-align:center"><img src="Resources/substraction.jpg" width = 85% /></div>
+
+```Python
 
 #Once we have the area colored free we can add the warped image through image addition
 addition = cv2.add(warped_image,substraction)
 
 cv2.imshow('detection',addition)
+```
+
+<div style="text-align:center"><img src="Resources/addition.jpg" width = 85% /></div>
+
+```Python
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
