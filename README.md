@@ -19,7 +19,7 @@
 - Oriented FAST and Rotated BRIEF (ORB)
   
 ### Additional
-*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Extras">Go to chapter extras</a>*
+*<a href="https://github.com/andyguz17/ComputerVision_Basics/tree/master/Extras">Go to Extras</a>*
 
 - ArUco Tags for augmented reality 
 - Line Detection with the hough transform

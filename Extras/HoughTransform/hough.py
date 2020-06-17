@@ -1,133 +1,49 @@
-import cv2 
-import math
+import cv2
 import numpy as np
 
-def sort_param(x1, y1, x2, y2):
-    empty_glass = 0
+img = cv2.imread('example.png')
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-    if (y2 > y1):
-        return x1,y1,x2,y2
-    else:
-        return x2,y2,x1,y1
+#The first step should be to get an edges image 
+edges = cv2.Canny(gray,50,150,apertureSize = 3)
 
-image = cv2.imread('street_3.jpg')
-h,w = image.shape[:2]
+#Here we will define theparameteres for the detector 
+#The theta represents the orientation accuracy which is 1°
+theta = np.pi/180
 
-#You will want to change the scale depending on your application 
-#A lower resolution implies a higher speed, but less information to work with
-scale = .5
+#The rho represents the rows accuracy in pixels 
+rho = 1
 
-image = cv2.resize(image,(int(w*scale),int(h*scale)))
-gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+#Finally the threshold is the minimum number that the counter must have in order
+#to be considered as a line (in other words could be described as the minimum number of 
+#continous points)
+threshold = 100
 
-#We define 45 degrees filter to catch som specific lines with convolution 
-kernel_45 = np.array([[0,1,0],[1,0,-1],[0,-1,0]])
-kernel_135 = np.array([[0,1,0],[-1,0,1],[0,-1,0]])
+#Run and find the best candidates to be a line 
+lines = cv2.HoughLines(edges,rho,theta,threshold)
 
-conv_45 = cv2.filter2D(gray,-1,kernel_45)
-conv_135 = cv2.filter2D(gray,-1,kernel_135)
+#The lines vector will have the values of rho and theta 
+#which counter is equal or greater than the threshold
+images = []
+for i in range(len(lines)):
+    for rho,theta in lines[i]:
 
-#Add both components
-addition = conv_45+conv_135
+        #Using this information we can reconstruct the lines 
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a*rho
+        y0 = b*rho
+        x1 = int(x0 + 1000*(-b))
+        y1 = int(y0 + 1000*(a))
+        x2 = int(x0 - 1000*(-b))
+        y2 = int(y0 - 1000*(a))
 
-#Use non local means denoising algorithm to reduce the nbackground noise on the image
-addition = cv2.fastNlMeansDenoising(addition,addition,h=10,templateWindowSize=3,searchWindowSize=10)
+        #draw the representing line in the original image
+        cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
+        cv2.imshow('drawn',img)
 
-#Eliminate intermidiate points with thresholding, so you have only white and black
-ret,addition = cv2.threshold(addition,35,255,cv2.THRESH_BINARY)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-#If you want to change the scale you should tune up this parameters
-#In my case I used the scale .5 with 350 and 150 
-#and with scale .2 with 150 and 100
-
-#The calibration of the parameters will highly depende on the perspective of the camera
-#Size of the image, aspect ratio, etc.
-minLineLength = 350
-maxLineGap = 100
-
-#Evaluate the image using the Hough transform to catch continous lines
-lines = cv2.HoughLinesP(addition,1,np.pi/180,80,minLineLength,maxLineGap)
-
-#initialize empty lists to store the coordinates of the desired lines
-left_line = []
-right_line = []
-
-try:
-    for i in range(len(lines)):
-
-        aux_l = 0
-        aux_r = 0
-
-        for x1,y1,x2,y2 in lines[i]:
-
-            #First we need to sort our lines
-            x1,y1,x2,y2 = sort_param(x1,y1,x2,y2)
-            
-            #Remove horizontal lines 
-            if(abs(y1-y2)<=10):
-                continue 
-
-            #Remove 90° vertical lines
-            if(abs(x1-x2)<=30):
-                continue 
-            
-            #Calculate width and height
-            y_diff = y2 - y1 
-            x_diff = abs(x2-x1)
-
-            #Orientation   
-            #With this part we will divide between the left and right line
-            #And save its values, also we will calculate the slope for each line             
-            if(x2<x1):
-                if(y_diff>aux_l):
-                    aux_l = y_diff
-                    left_line = [x1,y1,x2,y2]
-                    m_left = (y_diff/x_diff)
-                    x_left = x1 
-                    y_left = y1
-                else:
-                    continue
-
-            else: 
-                if(y_diff>aux_r):
-                    aux_r = y_diff           
-                    right_line = [x1,y1,x2,y2]     
-                    m_right = (y_diff/x_diff)
-                    x_right = x1 
-                    y_right = y1
-                else: 
-                    continue
-    
-    #This are just the projections of the lines, using basic calculus for a linear function
-    #Line projection for the Left side 
-    yl_0 = int(h*scale)
-    xl_0 = int(((y_left-yl_0)/m_left)+x_left) 
-
-    if(xl_0<=0):
-        xl_0 = 0
-        yl_0 = int(m_left*(-xl_0+x_left)+y_left)
-
-    yl_1 = yl_0-int(yl_0*0.4)
-    xl_1 = int(((y_left-yl_1)/m_left)+x_left)
-
-    #Line projection for the right side
-    yr_0 = int(h*scale)
-    xr_0 = int(((-y_right+yr_0)/m_right)+x_right) 
-
-    if(xr_0 > int(w*scale)):
-        xr_0 = int(w*scale)
-        yr_0 = int(m_right*(xr_0-x_right)+y_right)
-
-    yr_1 = yl_0-int(yl_0*0.4)
-    xr_1 = int(((-y_right+yr_1)/m_right)+x_right)
-
-    #We draw the projection of the line 
-    cv2.line(image,(xl_1, yl_1),(xl_0, yl_0),(255,0,255),8)
-    cv2.line(image,(xr_0, yr_0),(xr_1, yr_1),(255,0,255),8)
-
-except: 
-    pass
-
-cv2.imshow('result',image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
