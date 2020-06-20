@@ -90,6 +90,8 @@ For the next exercise, we will apply a color filter to the next image. The main 
 <div style="text-align:center"><img src="Color%20Filtering/Filtering.png" width = 15% /></div>
 <br>
 
+We use the HSV space colors, because it makes easier to define the color we want, this is because the color components it self are defined by the Hue channel, being all the chromatic spectrum present in it.  
+
 ###### *Color Filtering/main.py*
 ```Python
 import cv2
@@ -116,8 +118,16 @@ max_red = np.array([180,255,255])
 
 min_blue = np.array([110,220,220])
 max_blue = np.array([120,255,255])
+```
+For better comprehension of this part, we can make use of the following image, it is an aproximation of how the colors are defined in the hue channel. 
 
+<div style="text-align:center"><img src="Resources/hsv_colors.png" width = 60% /></div>
 
+For example if the color I'm looking for is blue, my Hue range should be between 110 and 120, or 100 and 130 for a wider range. So the value of my lower limit should look something like ```min_blue = np.array([110,Smin,Vmin])``` and the higher limit ```max_blue = np.array([120,Smax,Vmax])```, in the case of Saturation and value we can say that the lower the saturation the closer to white, and the lower the value the closer to black, as can be seen in the image below:
+
+<div style="text-align:center"><img src="Resources/blue_c.png" width = 35% /></div>
+
+```Python
 #This is the actual color detection 
 #Here we will create a mask that contains only the colors defined in your limits
 #This mask is binary

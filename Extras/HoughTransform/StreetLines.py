@@ -10,7 +10,7 @@ def sort_param(x1, y1, x2, y2):
     else:
         return x2,y2,x1,y1
 
-image = cv2.imread('street_4.jpg')
+image = cv2.imread('cde.jpg')
 h,w = image.shape[:2]
 
 #You will want to change the scale depending on your application 
