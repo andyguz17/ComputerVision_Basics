@@ -90,7 +90,7 @@ For the next exercise, we will apply a color filter to the next image. The main 
 <div style="text-align:center"><img src="Color%20Filtering/Filtering.png" width = 15% /></div>
 <br>
 
-We use the HSV space colors, because it makes easier to define the color we want, this is because the color components it self are defined by the Hue channel, being all the chromatic spectrum present in it.  
+We use the HSV space colors, because it makes easier to define the color we want, this is because the color components it self are defined by the Hue channel, being all the chromatic spectrum present in it, compared to the RGB that we need all the three channels to define a color.
 
 ###### *Color Filtering/main.py*
 ```Python
