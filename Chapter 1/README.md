@@ -90,7 +90,7 @@ For the next exercise, we will apply a color filter to the next image. The main 
 <div style="text-align:center"><img src="Color%20Filtering/Filtering.png" width = 15% /></div>
 <br>
 
-We use the HSV space colors, because it makes easier to define the color we want, this is because the color components it self are defined by the Hue channel, being all the chromatic spectrum present in it, compared to the RGB that we need all the three channels to define a color.
+We use the HSV space colors, because it makes easier to define the color we want, the color components itself are defined by the Hue channel, being all the chromatic spectrum present in it, compared to the RGB that we need all the three channels to define a color.
 
 ###### *Color Filtering/main.py*
 ```Python
@@ -166,52 +166,60 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-#### Edge Detection 
+### Edge Detection 
 
 The edge detection in the image processing world is very important because it facilitates the object recognition, region segmentation of images, and many other tasks. The edges are places of the image where an abrupt change in the levels of gray exists.
 
 For this next chapter, we are going to work with edge detection. In first place we will talk about the canny detector, which uses convolution masks and is based on the first derivative, In second place is the sobel operator,  which also works with convolutions. (It should be noted that the canny detector uses the sobel operator to get the first derivative in the horizontal and vertical direction for the gradient).
 
-##### Canny edge detection
-*For better understanding of the canny edge detector you can visit the <a href="https://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html">Opencv Page</a>*
+#### Sobel Operator
 
-###### *Edge detection/canny.py*
-```Python
-import cv2
-import numpy as np 
+The <a href="https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator">Sobel operator</a> is used in image processing,especially in edge detection algorithms. The operator calculates the intensity gradient of an image in every píxel using the convolution function, and the result shows the intensity magnitude changes that could be considered edges. (The convolution is a mathematical operation that can be widely used in the signal processing as a filter - it transforms a two functions into a third one representing how much it changes the second function with respect to the first one).
 
-img = cv2.imread('test_img.png')
-img = cv2.resize(img,(450,350))
+##### The convolution 
 
-#The canny detector uses two parameters appart from the image:
-#The minimum and maximum intensity gradient
-minV = 30
-maxV = 100
+Lets suppose we have a Matrix M with **_m_** rows by **_n_** coolumns: 
 
-edges = cv2.Canny(img,minV,maxV)
-cv2.imshow('Original',img)
-```
-
-<div style="text-align:center"><img src="Edge%20detection/test_img.png" width = 40% /></div>
+<div style="text-align:center"><img src="Resources/Mmn.png" width = 35% /></div>
 <br>
 
-```Python
-cv2.imshow('Edges',edges)
-```
+And a second matrix (this should be a square Matrix), that we will call  the kernel, with **_i_** rows and **_j_** columns: 
 
-<div style="text-align:center"><img src="Resources/canny.jpg" width = 40% /></div>
+<div style="text-align:center"><img src="Resources/kij.png" width = 35% /></div>
 <br>
 
-```Python
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-```
+So the convolution between the **_M_** matrix and the kernel **_k_** will be: 
+<div style="text-align:center"><img src="Resources/res.png" width = 25% /></div>
+<br>
 
-The ```minV``` and ```maxV``` are considered the limits of intensity gradient. This means that if the gradient intesity is lower than ```minV```,  this part of the image are considered non-edges so they will be discarded. If the value is higher than ```maxV```, the they are considered borders. Finally,  those who are in between the limits will be considered edges or non-edges depending on their connectivity.
+Which results into a third matrix **_R_**:
+ 
+<div style="text-align:center"><img src="Resources/Rab.png" width = 35% /></div>
+<br>
 
-##### Sobel Operator
+Where the rows and columns will be defined by: 
 
-The sobel operator is used in image processing,especially in edge detection algorithms. The operator calculates the intensity gradient of an image in every píxel using the convolution function, and the result shows the intensity magnitude changes that could be considered edges. (The convolution is a mathematical operation that can be widely used in the signal processing as a filter - it transforms a two functions into a third one representing how much it changes the second function with respect to the first one).
+<div style="text-align:center"><img src="Resources/size.png" width = 25% /></div>
+<br>
+
+So the components of R will be given by: 
+
+<div style="text-align:center"><img src="Resources/Sum.png" width = 65% /></div>
+<br>
+
+For better understanding of this operation lets work with a **_5x5_** Matrrix and a **_3x3_** kernel:
+
+<div style="text-align:center"><img src="Resources/Convolutional.png" width = 65% /></div><br>
+
+The Convolution operation will be something like: 
+
+<div style="text-align:center"><img src="Resources/convolution.gif" width = 65% /></div><br>
+
+As can be seen in the gif above the kernel travels around the image from left to right and top to bottom. The jump distance of the kenel is called stride, that is commonly set as 1px. 
+
+Is important you to understand the convolution operation, the gradient calculated by the sobel operator in a image, is made by convolving the "Sobel Filters" all over the image. We have 2 kernels, for vertical and horizontal gradients: 
+
+<div style="text-align:center"><img src="Resources/sobel_operators.png" width = 40% /></div>
 
 ###### *Edge detection/sobelA.py*
 ```Python
@@ -255,10 +263,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 
-This is the method that is already built in Opencv. For Better understanding of the sobel operator we can create our own sobel operators and use the convolution to extract the gradients, to find the same results. The Sobel kernels are the following:
-
-<div style="text-align:center"><img src="Resources/sobel_operators.png" width = 40% /></div>
-<br>
+The code above uses an already builded opencv function, however we can replicate this manually using the function ```cv2.filter2D``` to convolve between our image and the Sobel kernels:
 
 ###### *Edge Detection/sobelB.py* 
 ```Python
@@ -306,9 +311,66 @@ cv2.destroyAllWindows()
 ```
 As you can see, the results are basically the same. The convolution is a method of filtering images that has been used in the last few years for developing complex models of neural networks to work with images and video. This runs out of the idea that instead of a kernel of <img src="https://render.githubusercontent.com/render/math?math=3x3"> you can have many <img src="https://render.githubusercontent.com/render/math?math=n"> dimensional kernels of <img src="https://render.githubusercontent.com/render/math?math=mxm"> size, and its values are not fixed, they're variables that can be trained for any purpose. Under this idea you could train a filtering model that can detect almost anything you want. Pretty awesome, right? 
 
-Feel free to play and experiment with the upper code.It is a good exercise to understand what happens when  changing the values of the kernels.Try to add more dimensions to the matrix as well and see what happens.
+Feel free to play and experiment with the upper code. It is a good exercise to understand what happens when  changing the values of the kernels.Try to add more dimensions to the matrix as well and see what happens.
 
-#### Morphological Transformations 
+#### Canny edge detection
+*For better understanding of the canny edge detector you can visit the <a href="https://docs.opencv.org/trunk/da/d22/tutorial_py_canny.html">Opencv Page</a>*
+
+This is a multi-stage algorithm based on the sobel operator, described above. The first stage of the canny detector is the Noise reduction, which is done applying a Gaussian Filter, defined by: 
+
+<div style="text-align:center"><img src="Resources/GaussFilter.png" width = 50% /></div>
+
+where each value of the kernel is described by: 
+
+<div style="text-align:center"><img src="Resources/GaussDefinition.png" width = 28% /></div>
+
+This step will smooth the image, like the alkgorithm is based on the derivative to get the gradient (Sobel), this is very sensitive to noise, so this step helps to decrease that sensibility. 
+
+The second stage is acquiring the gradients, where the intensity (Magnitud) and orientation of the edges is calculated, the first part is done obtaining the derivatives **_Ix_** and **_Iy_** which can be implemented by convolving the image with the horizontal and vertical Sobel kernels. 
+
+Once we have both derivatives, the magnitud **_G_** and orientation **_θ_** are defined by: 
+
+<div style="text-align:center"><img src="Resources/magnitud_Orientation.png" width = 28% /></div>
+
+After obtaining this information an stage of <a href="https://arxiv.org/pdf/1705.02950.pdf">Non Maximal supression</a> is applied, to eliminate pixels that could not be wanted. For this, every pixel is checked if it is a local maximum in its neighborhood in the direction of gradient. Finally is applied a stage of Hysteresis thresholding which decides which edges are really edges and which are not.
+
+*A nice explanation of the Hysteresis can be found <a href="https://towardsdatascience.com/canny-edge-detection-step-by-step-in-python-computer-vision-b49c3a2d8123">here</a>.*
+
+###### *Edge detection/canny.py*
+```Python
+import cv2
+import numpy as np 
+
+img = cv2.imread('test_img.png')
+img = cv2.resize(img,(450,350))
+
+#The canny detector uses two parameters appart from the image:
+#The minimum and maximum intensity gradient
+minV = 30
+maxV = 100
+
+edges = cv2.Canny(img,minV,maxV)
+cv2.imshow('Original',img)
+```
+
+<div style="text-align:center"><img src="Edge%20detection/test_img.png" width = 40% /></div>
+<br>
+
+```Python
+cv2.imshow('Edges',edges)
+```
+
+<div style="text-align:center"><img src="Resources/canny.jpg" width = 40% /></div>
+<br>
+
+```Python
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+The ```minV``` and ```maxV``` are considered the limits of intensity gradient. This means that if the gradient intesity is lower than ```minV```,  this part of the image are considered non-edges so they will be discarded. If the value is higher than ```maxV```, the they are considered borders. Finally,  those who are in between the limits will be considered edges or non-edges depending on their connectivity. 
+
+### Morphological Transformations 
 
 Morphological transformations are in my personal opinion one of the most important operations in image processing, because they can be helpful with noise suppression in images and other tasks. These are simple operations based on the image form commonly applicated over a binary image. This works with a matrix kernel that can be, for example, a <img src="https://render.githubusercontent.com/render/math?math=5x5"> matrix of ones. 4 of the most common morphological transformations are:
 
