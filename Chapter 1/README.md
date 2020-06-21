@@ -174,7 +174,7 @@ For this next chapter, we are going to work with edge detection. In first place 
 
 #### Sobel Operator
 
-The <a href="https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator">Sobel operator</a> is used in image processing,especially in edge detection algorithms. The operator calculates the intensity gradient of an image in every píxel using the convolution function, and the result shows the intensity magnitude changes that could be considered edges. (The convolution is a mathematical operation that can be widely used in the signal processing as a filter - it transforms a two functions into a third one representing how much it changes the second function with respect to the first one).
+The <a href="https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator">Sobel operator</a> is used in image processing,especially in edge detection algorithms. The operator calculates the intensity <a href="http://www.cs.umd.edu/~djacobs/CMSC426/ImageGradients.pdf">gradient</a> of an image in every píxel using the convolution function, and the result shows the intensity magnitude changes that could be considered edges. (The convolution is a mathematical operation that can be widely used in the signal processing as a filter - it transforms a two functions into a third one representing how much it changes the second function with respect to the first one).
 
 ##### The convolution 
 
@@ -324,7 +324,7 @@ where each value of the kernel is described by:
 
 <div style="text-align:center"><img src="Resources/GaussDefinition.png" width = 28% /></div>
 
-This step will smooth the image, like the alkgorithm is based on the derivative to get the gradient (Sobel), this is very sensitive to noise, so this step helps to decrease that sensibility. 
+This step will smooth the image, like the algorithm is based on the derivative to get the gradient (Sobel), this is very sensitive to noise, so this step helps to decrease that sensibility. 
 
 The second stage is acquiring the gradients, where the intensity (Magnitud) and orientation of the edges is calculated, the first part is done obtaining the derivatives **_Ix_** and **_Iy_** which can be implemented by convolving the image with the horizontal and vertical Sobel kernels. 
 

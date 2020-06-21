@@ -10,6 +10,24 @@ In the computer vision world one of the most important task is the classificatio
 
 A pretty good classifier algorithm that opencv has is the *Haar Cascade* which works with Haar Wavelets to analyze image pixels into squares, this was proposed by <a href="https://ieeexplore.ieee.org/abstract/document/990517">Viola & Jones</a> in 2001.This classifier work just like convolutions kernels, where we try to extract different features of the image with *"integral image"*. This uses the AdaBoost learning algorithm selecting small numbers of features from a large set of images.
 
+Detection objects with Haar works just like with any other object detection algorithm. where you have 2 stages, the first one where you extract important features from the images, and then second one where you use an algorithm to classify this information. Haar works with a group of filters, that helps to extrract the main features: 
+
+<div style="text-align:center"><img src="Resources/HaarFeatures.png" width = 70% /></div>
+
+This are similar to the sobel operators, Haar use this filters all over every images to train, and also uses different dimensions, so the algorithm can be scale invariant, this works using different scale filters, for example: 
+
+<div style="text-align:center"><img src="Resources/mix.gif" width = 70% /></div>
+
+Each of this filters, will travell all around the image: 
+
+<div style="text-align:center"><img src="Resources/mix_2.gif" width = 70% /></div>
+
+With this algorithm the number of feature descriptors is very big, this is why, the authors use the integral image before, so it can have better descriptors and a faster processing time. This image is formed so, the intensity of the pixels is accumulated, so the intensity value of a pixel will be given by: 
+
+<div style="text-align:center"><img src="Resources/Intensity.png" width = 40% /></div>
+
+Once we have our Integral Image, we apply all the Haar Filters, and once we obtain the features, we use an <a href="https://codesachin.wordpress.com/tag/adaboost/">AdaBoost</a> algorithm as classifier. 
+
 For this training what we really want is a big data set with positive Images (Images with the object desired) and negative images (Images without the desired object). The main idea is that you can train this models to detect any object you want, similar to convolutional neural networks. In the code ahead you will learn how to use a trained model to detect faces in images. 
 
 ###### *FaceDetection/haar.py*
